@@ -10,7 +10,7 @@ void LL1::init_LL1(vector<string> grammar)
     cfg.get_follow();
     this->cfg = cfg;
 
-    cout << "Grammar: " << endl;
+    /* cout << "Grammar: " << endl;
     for (int ii = 0; ii < cfg.grammar.size(); ii++)
     {
         cout << cfg.grammar[ii][0] << " -> ";
@@ -48,7 +48,37 @@ void LL1::init_LL1(vector<string> grammar)
             cout << it2 << " ";
         cout << "}" << endl;
     }
+    cout << endl; */
 }
 void LL1::run_LL1()
 {
+    for (int i = 0; i < cfg.grammar.size(); i++)
+    {
+        if (cfg.nonTerminal.find(cfg.grammar[i][1]) != cfg.nonTerminal.end())
+        {
+            for (auto item : cfg.first[cfg.grammar[i][0]])
+                if (item != "#")
+                    if (LL1Table[cfg.grammar[i][0]].find(item) == LL1Table[cfg.grammar[i][0]].end())
+                        LL1Table[cfg.grammar[i][0]][item] = i;
+        }
+        else if (cfg.terminal.find(cfg.grammar[i][1]) != cfg.terminal.end())
+        {
+            if (LL1Table[cfg.grammar[i][0]].find(cfg.grammar[i][1]) == LL1Table[cfg.grammar[i][0]].end())
+                LL1Table[cfg.grammar[i][0]][cfg.grammar[i][1]] = i;
+        }
+        else if (cfg.grammar[i][1] == "#")
+        {
+            for (auto item : cfg.follow[cfg.grammar[i][0]])
+                if (LL1Table[cfg.grammar[i][0]].find(item) == LL1Table[cfg.grammar[i][0]].end())
+                    LL1Table[cfg.grammar[i][0]][item] = i;
+        }
+    }
+
+    /* cout << "LL1 Table: " << endl;
+    for (auto it : LL1Table)
+    {
+        for (auto it2 : it.second)
+            cout << it.first << " " << it2.first << " " << it2.second << endl;
+    }
+    cout << endl; */
 }
