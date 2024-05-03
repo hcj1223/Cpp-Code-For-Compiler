@@ -1,5 +1,0 @@
-expr -> expr addop term | term 
-addop -> + | - 
-term -> term mulop factor | factor 
-mulop -> * 
-factor -> ( expr ) | number 
